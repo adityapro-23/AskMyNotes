@@ -4,7 +4,6 @@ import { httpAction } from "./_generated/server";
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { convertToModelMessages, streamText, UIMessage, tool, stepCountIs } from "ai";
 import { google } from "@ai-sdk/google";
-import { findRelevantNotes } from "./notesActions";
 import { z } from "zod";
 import { internal } from "./_generated/api";
 

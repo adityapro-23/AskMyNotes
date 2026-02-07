@@ -1,6 +1,6 @@
 import { getAuthUserId } from "@convex-dev/auth/server";
-import { internalAction, internalMutation, internalQuery, mutation } from "./_generated/server";
-import { convexToJson, v } from "convex/values";
+import { internalMutation, internalQuery, mutation } from "./_generated/server";
+import { v } from "convex/values";
 import { query } from "./_generated/server";
 
 export const createNoteWithEmbeddings = internalMutation({
@@ -15,7 +15,9 @@ export const createNoteWithEmbeddings = internalMutation({
             })
         )
     },
+
     returns: v.id("notes"),
+
     handler: async(ctx, args) => {
         const noteId = await ctx.db.insert("notes", {
             title: args.title,
@@ -33,6 +35,59 @@ export const createNoteWithEmbeddings = internalMutation({
         }
 
         return noteId;
+    },
+});
+
+export const updateNoteWithEmbeddings = internalMutation({
+    args: {
+        noteId: v.id("notes"),
+        title: v.string(),
+        body: v.string(),
+        embeddings: v.array(
+            v.object({
+                embedding: v.array(v.float64()),
+                content: v.string(),
+            })
+        ),
+    },
+
+    handler: async(ctx, args) => {
+        const userId = await getAuthUserId(ctx);
+        if(!userId) {
+            throw new Error("User is not authorized to perform this action.");
+        }
+
+        const note = await ctx.db.get(args.noteId);
+        if(!note) {
+            throw new Error("Note not found!");
+        } else if(note.userId != userId) {
+            throw new Error("User is not authorized to perform this action.");
+        }
+
+        // Update note text
+        await ctx.db.patch(args.noteId, {
+            title: args.title,
+            body: args.body,
+        });
+
+        // Delete all existing embeddings for this note
+        const oldEmbeddings = await ctx.db
+            .query("noteEmbeddings")
+            .withIndex("by_noteId", (q) => q.eq("noteId", args.noteId))
+            .collect();
+
+        for(const embedding of oldEmbeddings) {
+            await ctx.db.delete(embedding._id);
+        }
+
+        for(const embeddingData of args.embeddings) {
+            await ctx.db.insert("noteEmbeddings", {
+                content: embeddingData.content,
+                embedding: embeddingData.embedding,
+                noteId: args.noteId,
+                userId: userId,
+            });
+        }
     },
 });
 
