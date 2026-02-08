@@ -78,7 +78,7 @@ export const findRelevantNotes = internalAction({
             filter: q => q.eq("userId", args.userId),   //sorted by most relevant vector at top
         });
 
-        console.log("Vector search results: ", results);
+        // console.log("Vector search results: ", results);
 
         const resultsAboveThreshold = results.filter(
             result => result._score > 0.3

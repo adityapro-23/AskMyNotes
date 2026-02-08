@@ -17,7 +17,6 @@ import { useForm } from "react-hook-form";
 import { AuthFormValues, signinSchema } from "../schema";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { useRouter } from "next/navigation";
-import { sign } from "crypto";
 import { toast } from "sonner";
 
 export function SigninForm() {

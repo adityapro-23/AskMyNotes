@@ -44,7 +44,7 @@ http.route({
                         query: z.string().describe("The user's query"),
                     }),
                     execute: async({query}) => {
-                        console.log("findRelevantNotes query: ", query);
+                        // console.log("findRelevantNotes query: ", query);
                         
                         const relevantNotes = await ctx.runAction(
                             internal.notesActions.findRelevantNotes,
