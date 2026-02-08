@@ -60,8 +60,7 @@ export function NotePreviewDialog({note}: NotePreviewDialogProps) {
           <div className="mt-4 whitespace-pre-wrap">{note.body}</div>
           <DialogFooter className="mt-6">
             <Button 
-              variant="ghost"
-              className="gap-2"
+              className="gap-2 bg-blue-500 text-white hover:bg-blue-700"
               onClick={() => setShowEditDialog(true)}
             >
               <Pencil size={16} />

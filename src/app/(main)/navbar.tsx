@@ -15,8 +15,8 @@ export function Navbar() {
           <Image
             src={logo}
             alt="AskMyNotes Logo"
-            width={32}
-            height={32}
+            width={52}
+            height={52}
             className="rounded"
           />
           AskMyNotes
