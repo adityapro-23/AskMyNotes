@@ -11,9 +11,9 @@ export default function Home() {
         <div className="mb-8">
           <Image
             src={logo}
-            alt="Smart Notes Logo"
-            width={120}
-            height={120}
+            alt="AskMyNotes Logo"
+            width={160}
+            height={160}
             className="mx-auto"
             priority
           />
